@@ -410,7 +410,7 @@ function genotype(record::Record, index::Integer, key::Integer)
     checkfilled(record)
     N = n_sample(record)
     offset::Int = record.sharedlen
-    for j in 1:n_format(record)
+    for _ in 1:n_format(record)
         k, offset = loadvec(record.data, offset)
         @assert length(k) == 1
         head, offset = loadvechead(record.data, offset)
@@ -429,19 +429,19 @@ function genotype(record::Record, indexes::AbstractVector{<:Integer}, key::Integ
     checkfilled(record)
     N = n_sample(record)
     offset::Int = record.sharedlen
-    for j in 1:n_format(record)
+    for _j in 1:n_format(record)
         k, offset = loadvec(record.data, offset)
         @assert length(k) == 1
         head, offset = loadvechead(record.data, offset)
         if k[1] == key
             vals = Vector{Any}[]
-            for n in 1:N
+            for _ in 1:N
                 val, offset = loadvecbody(record.data, offset, head)
                 push!(vals, val)
             end
             return vals[indexes]
         else
-            for n in 1:N
+            for _ in 1:N
                 offset = skipvecbody(record.data, offset, head)
             end
         end
